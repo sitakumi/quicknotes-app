@@ -3,11 +3,13 @@ const form           = document.getElementById('note-form');
 const noteInput      = document.getElementById('note-input');
 const categorySelect = document.getElementById('category-select');
 const errorMessage   = document.getElementById('error-message');
+const searchInput    = document.getElementById('search-input');
 const notesList      = document.getElementById('notes-list');
 const noteCount      = document.getElementById('note-count');
 
 // ---------- constants ----------
 const MAX_CHARS = 200;
+const STORAGE_KEY = 'quicknotes-notes';
 
 // ---------- state ----------
 let notes = [];
@@ -35,6 +37,26 @@ function clearError() {
   errorMessage.textContent = '';
 }
 
+// ---------- persistence ----------
+function saveNotes() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+  } catch (e) {
+    // storage may be unavailable (private mode, quota) — ignore
+  }
+}
+
+function loadNotes() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+}
+
 // ---------- count text ----------
 function updateCount() {
   const total = notes.length;
@@ -47,16 +69,47 @@ function updateCount() {
   }
 }
 
+// ---------- filtering ----------
+// Returns the notes whose text contains every word in the query
+// (case-insensitive). Empty query → all notes.
+function getVisibleNotes() {
+  const query = searchInput.value.trim().toLowerCase();
+  if (query === '') return notes;
+
+  const words = query.split(/\s+/);
+  return notes.filter((note) => {
+    const haystack = note.text.toLowerCase();
+    return words.every((word) => haystack.includes(word));
+  });
+}
+
 // ---------- render ----------
 function renderNotes() {
   // clear the list
   notesList.innerHTML = '';
 
-  // update the count paragraph
+  // update the count paragraph (based on all notes, not filtered)
   updateCount();
 
-  // build a card for each note
-  notes.forEach((note) => {
+  const visible = getVisibleNotes();
+
+  // if a search is active and nothing matches, show a message
+  if (visible.length === 0) {
+    const li = document.createElement('li');
+    li.className = 'no-results';
+    if (notes.length === 0) {
+      li.textContent = 'No notes yet — add one above!';
+    } else if (searchInput.value.trim() !== '') {
+      li.textContent = 'No notes match your search.';
+    } else {
+      li.textContent = 'No notes yet — add one above!';
+    }
+    notesList.appendChild(li);
+    return;
+  }
+
+  // build a card for each visible note
+  visible.forEach((note) => {
     const li = document.createElement('li');
     li.className = `note-card ${categoryClass(note.category)}`;
     li.dataset.id = note.id;
@@ -96,11 +149,13 @@ function addNote(text, category) {
   };
 
   notes.push(note);
+  saveNotes();
   renderNotes();
 }
 
 function deleteNote(id) {
   notes = notes.filter((note) => note.id !== id);
+  saveNotes();
   renderNotes();
 }
 
@@ -139,5 +194,9 @@ form.addEventListener('submit', (event) => {
 // clear the error as soon as the user edits the field again
 noteInput.addEventListener('input', clearError);
 
+// ---------- search ----------
+searchInput.addEventListener('input', renderNotes);
+
 // ---------- init ----------
+notes = loadNotes();
 renderNotes();
