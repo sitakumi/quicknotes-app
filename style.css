@@ -1,0 +1,210 @@
+:root {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --text: #1f2933;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --accent: #e8ad19;
+  --accent-dark: #8990a5;
+  --header-bg: #f0471d;
+  --header-text: #f8fafc;
+  --error: #dc2626;
+
+  --category-personal: #94570d; 
+  --category-work: #991b1b;     
+  --category-study: #b7b910;    
+
+  --radius: 10px;
+  --shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+  --gap: 1.25rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.app-header {
+  background: var(--header-bg);
+  color: var(--header-text);
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.app-title {
+  margin: 0;
+  font-size: 1.8rem;
+  letter-spacing: 0.02em;
+}
+
+.app-tagline {
+  margin: 0.35rem 0 0;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.app-main {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+}
+
+.panel h2 {
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+}
+
+#note-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1 1 180px;
+}
+
+.field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+input,
+select {
+  font: inherit;
+  color: var(--text);
+  background: #fff;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  outline: none;
+  width: 100%;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+button {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.6rem 1.1rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  transition: background 0.15s;
+  flex: 0 0 auto;
+}
+
+button:hover {
+  background: var(--accent-dark);
+}
+
+.error {
+  margin: 0.75rem 0 0;
+  min-height: 1.2em;
+  color: var(--error);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+#note-count {
+  margin: 1rem 0 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.notes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+
+.note-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--border); 
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.note-card .note-text {
+  margin: 0;
+  word-break: break-word;
+}
+
+.note-card .note-meta {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.category-personal {
+  border-left-color: var(--category-personal);
+}
+
+.category-work {
+  border-left-color: var(--category-work);
+}
+
+.category-study {
+  border-left-color: var(--category-study);
+}
+
+.app-footer {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 600px) {
+  #note-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .field {
+    flex: 1 1 auto;
+  }
+
+  button {
+    width: 100%;
+  }
+}
