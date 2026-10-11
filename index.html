@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickNotes</title>
+</head>
+<body>
+  <header class="app-header">
+    <h1 class="app-title">QuickNotes</h1>
+    <p class="app-tagline">Jot it down before you forget.</p>
+  </header>
+
+  <main class="app-main">
+    <section class="panel" id="add-note-section" aria-labelledby="add-note-heading">
+      <h2 id="add-note-heading">Add a note</h2>
+
+      <form id="note-form" novalidate>
+        <div class="field">
+          <label for="note-input">Note</label>
+          <input
+            type="text"
+            id="note-input"
+            name="note"
+            placeholder="What's on your mind?"
+            autocomplete="off"
+          >
+        </div>
+
+        <div class="field">
+          <label for="category-select">Category</label>
+          <select id="category-select" name="category">
+            <option value="Personal">Personal</option>
+            <option value="Work">Work</option>
+            <option value="Study">Study</option>
+          </select>
+        </div>
+
+        <button type="submit" id="add-note-btn">Add Note</button>
+      </form>
+
+      <p id="error-message" class="error" role="alert" aria-live="polite"></p>
+    </section>
+
+    <section class="panel" id="notes-section" aria-labelledby="notes-heading">
+      <h2 id="notes-heading">Your notes</h2>
+
+      <div class="field">
+        <label for="search-input">Search</label>
+        <input
+          type="search"
+          id="search-input"
+          placeholder="Search notes…"
+          autocomplete="off"
+        >
+      </div>
+
+      <p id="note-count">0 notes</p>
+
+      <ul id="notes-list" class="notes-list"></ul>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>&copy; 2025 QuickNotes</p>
+  </footer>
+</body>
+</html>
