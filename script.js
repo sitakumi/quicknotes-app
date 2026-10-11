@@ -1,10 +1,13 @@
 // ---------- element references ----------
-const form          = document.getElementById('note-form');
-const noteInput     = document.getElementById('note-input');
+const form           = document.getElementById('note-form');
+const noteInput      = document.getElementById('note-input');
 const categorySelect = document.getElementById('category-select');
-const errorMessage  = document.getElementById('error-message');
-const notesList     = document.getElementById('notes-list');
-const noteCount     = document.getElementById('note-count');
+const errorMessage   = document.getElementById('error-message');
+const notesList      = document.getElementById('notes-list');
+const noteCount      = document.getElementById('note-count');
+
+// ---------- constants ----------
+const MAX_CHARS = 200;
 
 // ---------- state ----------
 let notes = [];
@@ -32,14 +35,25 @@ function clearError() {
   errorMessage.textContent = '';
 }
 
+// ---------- count text ----------
+function updateCount() {
+  const total = notes.length;
+  if (total === 0) {
+    noteCount.textContent = 'You have no notes yet.';
+  } else if (total === 1) {
+    noteCount.textContent = 'You have 1 note.';
+  } else {
+    noteCount.textContent = `You have ${total} notes.`;
+  }
+}
+
 // ---------- render ----------
 function renderNotes() {
   // clear the list
   notesList.innerHTML = '';
 
-  // update the count
-  const total = notes.length;
-  noteCount.textContent = `${total} ${total === 1 ? 'note' : 'notes'}`;
+  // update the count paragraph
+  updateCount();
 
   // build a card for each note
   notes.forEach((note) => {
@@ -90,19 +104,29 @@ function deleteNote(id) {
   renderNotes();
 }
 
-// ---------- form submit ----------
+// ---------- form submit with validation ----------
 form.addEventListener('submit', (event) => {
   event.preventDefault();
 
-  const text = noteInput.value.trim();
+  const raw = noteInput.value;
+  const text = raw.trim();
   const category = categorySelect.value;
 
+  // 1. empty or only spaces
   if (text === '') {
-    showError('Please enter a note before adding.');
+    showError('Please type a note first.');
     noteInput.focus();
     return;
   }
 
+  // 2. too long
+  if (raw.length > MAX_CHARS) {
+    showError('Notes must be 200 characters or fewer.');
+    noteInput.focus();
+    return;
+  }
+
+  // valid → clear error and add
   clearError();
   addNote(text, category);
 
@@ -112,7 +136,7 @@ form.addEventListener('submit', (event) => {
   noteInput.focus();
 });
 
-// clear the error as soon as the user starts typing again
+// clear the error as soon as the user edits the field again
 noteInput.addEventListener('input', clearError);
 
 // ---------- init ----------
